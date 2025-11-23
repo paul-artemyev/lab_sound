@@ -1,6 +1,7 @@
 import numpy as np
 import os
 from const import *
+from lsm import *
 
 def find_max_line_number(filename):
     max_value = -1
@@ -82,3 +83,17 @@ def plot_co2(hum, co2Max):
     soundSpeed = np.sqrt(gamma * R * T / (mu / 1000))
 
     return co2X * 100, soundSpeed
+
+def coefs(hum):
+    x,y = plot_co2(hum, 6)
+    return lsm(x,y)
+
+def find_intersection(k, b, y0, dk=None, db=None, dy0=None):
+    x_intersect = (y0 - b) / k
+    
+    if dk is not None and db is not None and dy0 is not None:
+        dx_intersect = np.sqrt(((y0 - b) / k**2 * dk)**2 + (db / k)**2 +(dy0 / k)**2)
+        return x_intersect, dx_intersect
+    else:
+        return x_intersect, 0
+    
